@@ -1,23 +1,12 @@
 import express from "express";
 // Controllers
 import { register, login } from "../controllers/auth.js";
-//validate with yup
-import { object, string } from "yup";
-
-const validate = (schema) => (req, res, next) => {
-  //code body
-  try {
-    console.log("This is validate");
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+import { registerSchema, validate } from "../validation/validator.js";
 
 const router = express.Router();
 
 // ENDPOINT http://localhost:8000/auth/users
-router.post("/register", register);
+router.post("/register", validate(registerSchema), register);
 router.post("/login", login);
 
 //export

@@ -33,13 +33,70 @@ export const register = async (req, res, next) => {
     const hashPassword = bcrypt.hashSync(password, 10);
     console.log(hashPassword);
 
-    res.json({ message: "This is register" });
+    // step 4 save to db
+    const result = await prisma.user.create({
+      data: {
+        email: email,
+        name: name,
+        password: hashPassword,
+      },
+    });
+
+    res.json({ message: `register ${result.name} success` });
   } catch (error) {
     next(error);
   }
 };
 
-export const login = (req, res) => {
-  // code body
-  res.json({ message: "this is LOGIN" });
+export const login = async (req, res, next) => {
+  try {
+    //TODO
+    /*
+    1. validate body
+    2. check body
+    3. check email in d 
+    4. check pwd
+    5. create token
+    6. response
+  */
+
+    //step2 check body
+    const { email, password } = req.body;
+
+    //step3 check email
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    console.log(user);
+    if (!user) {
+      createError(400, "Email invalid");
+    }
+
+    //step4 check password
+    const checkPassword = bcrypt.compareSync(password, user.password);
+    if (!checkPassword) {
+      createError(400, "Password invalid");
+    }
+
+    //step 5 generate
+    const payload = {
+      id: user.id,
+      role: user.role,
+    };
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({
+      message: `Login success, Welcome back ${user.name}`,
+      payload: payload,
+      token: token,
+    });
+
+    // code body
+    res.json({ message: "this is LOGIN" });
+  } catch (error) {
+    next(error);
+  }
 };
