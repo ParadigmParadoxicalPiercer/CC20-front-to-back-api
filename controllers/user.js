@@ -1,6 +1,18 @@
-export const listUser = (req, res) => {
+import { createError } from "../utils/createError.js";
+
+export const listUser = (req, res, next) => {
   // code body
-  res.json({ message: "This is listing all users" });
+  try {
+    // 1. Check Email
+    if (true) {
+      createError(400, "Email already exist");
+    } else {
+      throw new Error("somethings wrong");
+    }
+    res.json({ message: "This is list all users" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const readUser = (req, res) => {

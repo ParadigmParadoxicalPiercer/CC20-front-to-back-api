@@ -14,3 +14,12 @@ touch server.js
 ```bash
 npm install cors morgan nodemon
 ```
+
+## git
+
+```bash
+git init
+git add .
+git commit -m "first commit or message"
+git push
+```
