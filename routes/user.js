@@ -28,7 +28,7 @@ router.post("/user", createUser);
 //   //code body
 //   res.json({ message: "this is POST user" });
 // });
-router.patch("/user/role/:id", updateRoleUser);
+router.patch("/user/role/:id", authCheck, updateRoleUser);
 // router.patch("/user/role/:id", (req, res) => {
 //   //code body
 //   // console.log(req.params.id);
@@ -37,7 +37,7 @@ router.patch("/user/role/:id", updateRoleUser);
 
 //   res.json({ message: "this is PATCH role/id" });
 // });
-router.delete("/user/:id", deleteUser);
+router.delete("/user/:id", authCheck, deleteUser);
 // router.delete("/user/:id", (req, res) => {
 //   // code body
 //   const { id } = req.params;
